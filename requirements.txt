@@ -1,0 +1,11 @@
+psycopg2-binary
+qdrant-client
+llama-index
+langchain
+langchain-openai
+sentence-transformers
+pandas
+python-dotenv
+sqlalchemy
+torch
+transformers
