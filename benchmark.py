@@ -1,6 +1,6 @@
 import asyncio
 import time
-from orchestration import run_query_async, token_counter
+from agent import run_query_async, token_counter
 
 async def run_benchmark():
     test_queries = [
@@ -21,9 +21,6 @@ async def run_benchmark():
     for i, q in enumerate(test_queries, 1):
         print(f"Scenario {i}: {q}")
         print("-" * 30)
-        
-        # We don't want to print all debug info here to keep repo clean
-        # but orchestration.py will still print it. That's fine.
         
         token_counter.reset_counts()
         response = await run_query_async(q)

@@ -1,238 +1,241 @@
+# Agentic CDP Demo — Hybrid AI Audience Discovery
+
+This project demonstrates an **AI-powered Customer Data Platform (CDP)** that combines:
+
+- Deterministic analytics (PostgreSQL)
+- Semantic discovery (Qdrant vector search)
+- LLM reasoning
+- **LangGraph-based workflow orchestration**
+- ReAct Agent as a conversational entrypoint
+
+The goal is to show how modern AI systems can move CDPs from **manual, rule-based segmentation** to **intelligent, automated campaign orchestration**.
+
+Instead of "chat with PDFs", this demo focuses on a realistic marketing use case:
+
+> *Suggest customers for a luxury red-themed fashion campaign.*
+
+---
+
+## High-Level Architecture
+
 ```mermaid
 flowchart LR
 
-%% =====================
-%% User & Agent Layer
-%% =====================
+U[Marketing / Analyst]
 
-U[Marketing / Analyst User]
+A[ReAct Agent<br/>LLM Interface]
 
-A[Agentic AI Layer<br/>ReAct Agent]
+LG[LangGraph Campaign Orchestrator]
 
-U --> A
-
-%% =====================
-%% Orchestration
-%% =====================
-
-A -->|Analytical questions| SQL_TOOL[SQL Analytics Tool]
-A -->|Hybrid intent + behavior| HYBRID_TOOL[Hybrid Discovery Tool]
-A -->|Profile enrichment| PROFILE_TOOL[SQL Data Retriever]
-
-%% =====================
-%% Customer Data Layer
-%% =====================
+subgraph RET["Retrieval Layer (LlamaIndex)"]
+    SQLENG[SQL Query Engine]
+    VECENG[Vector Query Engine]
+end
 
 subgraph CDL["Customer Data Layer"]
-
-PG[(PostgreSQL<br/>CRM + Clickstream Events)]
-QD[(Qdrant<br/>Customer Embeddings)]
-
+    PG[(PostgreSQL<br/>CRM + Events)]
+    QD[(Qdrant<br/>Customer Embeddings)]
 end
 
-SQL_TOOL --> PG
-PROFILE_TOOL --> PG
+U --> A
+A -->|Campaign Requests| LG
 
-%% =====================
-%% True Hybrid Fusion
-%% =====================
+LG -->|Behavioral Gate| SQLENG
+SQLENG --> PG
+PG -->|customer_ids| LG
 
-HYBRID_TOOL -->|"1. Behavioral Gate (SQL)"| PG
-PG -->|customer_ids| HYBRID_TOOL
-HYBRID_TOOL -->|"2. Semantic Refinement"| QD
+LG -->|Semantic Refinement| VECENG
+VECENG --> QD
+QD --> VECENG
+VECENG --> LG
 
-QD --> HYBRID_TOOL
-HYBRID_TOOL --> A
+LG -->|Profile Enrichment| SQLENG
+SQLENG --> PG
 
-%% =====================
-%% Vector Only Discovery
-%% =====================
+LG --> OUT[Audience + Campaign Strategy]
+OUT --> U
+```
 
-A -->|Semantic discovery| VECTOR_TOOL[Semantic Search]
-VECTOR_TOOL --> QD
-QD --> VECTOR_TOOL
-VECTOR_TOOL --> A
+---
 
-%% =====================
-%% Ingestion Pipeline
-%% =====================
+## Core Concept: True Hybrid Fusion
 
-subgraph INGEST["Ingestion & Feature Engineering"]
+This system implements **SQL → Vector → SQL** fusion:
 
-CRM[CRM CSV]
-CLICK[Clickstream CSV]
+1. **Behavioral SQL Gate (Postgres)**  
+   Filters customers based on deterministic facts (purchases, recency, events).
 
-ETL[ETL / Aggregation<br/>Customer Semantic Profiles]
+2. **Semantic Refinement (Qdrant)**  
+   Ranks and refines those candidates using embeddings (e.g. "luxury", "red affinity").
 
-CRM --> ETL
-CLICK --> ETL
+3. **Profile Enrichment (Postgres)**  
+   Fetches full CRM profiles for activation.
 
-ETL --> PG
-ETL --> QD
+This avoids hallucinated analytics while enabling fuzzy discovery.
 
+---
+
+## Workflow Orchestration with LangGraph
+
+LangGraph is used as a **deterministic campaign orchestration engine**, not just an agent loop.
+
+The workflow is:
+
+1. Intent Classification  
+2. Behavioral SQL Gate  
+3. Semantic Vector Refinement  
+4. Audience Validation (with optional widening / narrowing loop)  
+5. Profile Enrichment  
+6. Campaign Recommendation  
+7. Final Output
+
+LangGraph manages state, branching, and iteration.
+
+The ReAct Agent is used only as the **conversational entrypoint** that delegates execution to this workflow.
+
+LlamaIndex is used strictly as the **retrieval abstraction layer** for SQL and vector search.
+
+---
+
+## Example Query
+
+"Suggest customers for a luxury red-themed fashion campaign."
+
+Behind the scenes:
+
+- SQL filters recent fashion buyers
+- Qdrant refines luxury + red affinity
+- LangGraph validates audience size
+- SQL enriches profiles
+- LLM generates campaign recommendations
+
+---
+
+## Project Structure
+
+```
+.
+├── agent.py        # ReAct Agent (user interaction + routing)
+├── engine.py       # LangGraph campaign workflow (core orchestration)
+├── ingest.py       # Data ingestion into Postgres + Qdrant
+├── cli.py          # CLI interface
+├── config.py       # Environment + model configuration
+├── main.py        # Entry point
+└── README.md
+```
+
+---
+
+## Available Tools
+
+The ReAct agent uses the following specialized tools to interact with the CDP:
+
+- **`sql_analytics`**: Translates natural language to SQL for deterministic CRM analysis (counts, sums, averages).
+- **`discovery_expert_pipeline`**: An autonomous multi-step pipeline for building full campaign strategies, including audience refinement and validation.
+- **`hybrid_discovery`**: Combines behavioral SQL filtering with semantic vector search for exploratory audience discovery.
+- **`sql_data_retriever`**: Fetches detailed JSON customer profiles once segments are identified.
+
+---
+
+## Technology Stack
+
+- LLM: OpenRouter-compatible models (Gemini / GPT / Claude)
+- Workflow Orchestration: LangGraph
+- Retrieval Layer: LlamaIndex
+- Relational DB: PostgreSQL
+- Vector DB: Qdrant
+- Embeddings: SentenceTransformers / HuggingFace
+
+---
+
+## Why This Matters
+
+Traditional composable CDPs rely on manual SQL segmentation and static rules.
+
+This demo shows how:
+
+- LLMs
+- Agents
+- Hybrid retrieval
+- Stateful workflows
+
+can dramatically speed up campaign creation and elevate CDPs into **intelligent journey orchestration platforms**.
+
+AI doesn’t replace CDPs — it makes them faster and smarter.
+
+---
+
+## ⚠️ Demo Disclaimer
+
+This project uses synthetic data and LLM-generated SQL for demonstration purposes.
+
+In production systems, SQL generation would be replaced with validated templates or DSLs, and governance, permissions, and cost controls would be mandatory.
+
+---
+
+## Future Work
+
+- Role-based access control
+- Cost tracking per workflow
+- Evaluation metrics
+- Campaign activation APIs
+- Governance & permissions
+
+---
+
+Built as a learning project for hybrid AI system design and agentic workflow orchestration.
+
+
+---
+
+## High-Level Component Diagram
+
+```mermaid
+flowchart TB
+
+User[Marketing User / Analyst]
+
+Agent[ReAct Agent<br/>Natural Language Interface]
+
+LangGraph[LangGraph<br/>Campaign Workflow Engine]
+
+subgraph Retrieval["Retrieval Layer (LlamaIndex)"]
+    SQL[SQL Engine]
+    Vector[Vector Engine]
 end
 
-%% =====================
-%% Output
-%% =====================
+subgraph Data["Customer Data Platform"]
+    PG[(PostgreSQL<br/>CRM + Events)]
+    QD[(Qdrant<br/>Customer Embeddings)]
+end
 
-A --> RESULT[Audience Segments<br/>JSON / Explanation]
-RESULT --> U
+User --> Agent
+Agent --> LangGraph
+
+LangGraph --> SQL
+LangGraph --> Vector
+
+SQL --> PG
+PG --> SQL
+
+Vector --> QD
+QD --> Vector
+
+LangGraph --> Output[Audience + Campaign Strategy]
+Output --> User
 ```
 
+This diagram shows the major system components and their responsibilities:
 
-# AI Audience Discovery Platform  
-**Hybrid Analytical + Semantic CDP Intelligence**
-
----
-
-## 1. Overview
-
-This project demonstrates an **AI-powered Audience Discovery System** built on top of a Customer Data Platform (CDP) architecture. It bridges the gap between structured relational data and unstructured semantic intent.
-
-**Core Innovation**: A 3-stage "True Hybrid Fusion" flow that uses SQL for behavioral narrowing, Vector Search for semantic refinement, and SQL for profile enrichment.
+- **ReAct Agent** – conversational entrypoint for marketers and analysts  
+- **LangGraph** – deterministic workflow orchestration (campaign logic, validation loops)  
+- **LlamaIndex** – retrieval abstraction for SQL and vector search  
+- **PostgreSQL** – system of record for CRM + behavioral events  
+- **Qdrant** – semantic customer profiles for intent-based discovery  
 
 ---
 
-## 2. High-Level Architecture
+# output examples
 
-```
-                   ┌──────────────────────┐
-                   │     CRM Data         │
-                   │  (PostgreSQL)        │
-                   └──────────┬───────────┘
-                               │
-                   ┌──────────▼───────────┐
-                   │   Clickstream Data   │
-                   │   (Event Layer)      │
-                   └──────────┬───────────┘
-                               │
-                      Data Ingestion Pipeline (Python)
-                               │
-          ┌────────────────────┴────────────────────┐
-          │                                         │
-  ┌───────▼────────┐                       ┌───────▼────────┐
-  │ Relational DB  │                       │  Vector Store  │
-  │ (Postgres)     │                       │  (Qdrant)      │
-  └───────┬────────┘                       └───────┬────────┘
-          │                                        │
-          └───────────────┬────────────────────────┘
-                          │
-                 Orchestration Layer (LlamaIndex)
-                          │
-                 Agentic Reasoning (Gemini 2.0 Flash)
-                          │
-                   Interactive CLI
-```
-
----
-
-## 3. The "True Hybrid Fusion" Strategy
-
-Unlike simple hybrid search (vector + metadata), this system implements a multi-stage orchestration flow:
-
-1. **SQL Gate (Narrowing)**: Filters the 500-customer population based on hard behavioral event conditions (e.g., "purchased red socks in 60 days").
-2. **Vector Refinement (Semantic)**: Performs a semantic search *inside* the filtered subset to match subjective intent (e.g., "interested in luxury").
-3. **SQL Enrichment (Enrichment)**: Retrieves the full, campaign-ready customer profiles (email, first name, etc.) for the resulting IDs.
-
----
-
-## 4. Behavioral Profiling
-
-During ingestion, the system extracts two types of intelligence:
-
-### 4.1 Calculated Interests
-The system analyzes clickstream weights (Purchase: 3, Add-to-Cart: 2, View: 1) to derive:
-- **Primary Interests**: Top product categories based on weighted behavior.
-- **Preferred Colors**: Most interacted color palettes.
-
-### 4.2 Luxury Tagging (Rule-Based Semantic)
-Customers with a `total_spent` > 800 are tagged with: *"This customer likes luxury items."* This tag is embedded into the vector representation, enabling high-precision retrieval for luxury-oriented queries.
-
----
-
-## 5. Technical Stack
-
-- **Orchestration**: [LlamaIndex](https://www.llamaindex.ai/)  
-  *Purpose*: LlamaIndex serves as the central **data framework** for our LLM application. It manages the connection between our raw data sources (Postgres, Qdrant) and the agent. Specifically, it handles the "Text-to-SQL" translation, vector store abstraction, and provides the `ReActAgent` loop that orchestrates multi-step tool usage.
-- **Vector DB**: [Qdrant](https://qdrant.tech/) (Distance: Cosine)
-- **Relational DB**: [PostgreSQL](https://www.postgresql.org/)
-- **LLM**: Gemini 2.0 Flash (via [OpenRouter](https://openrouter.ai/))
-- **Embeddings**: `all-MiniLM-L6-v2` (Sentence-Transformers)
-
----
-
-## 6. Tool Logic & Descriptions
-
-The system exposes three primary tools to the agent, each with specific logic:
-
-### 6.1 `sql_analytics`
-- **Purpose**: Deterministic analysis and counts.
-- **Logic**: Uses LlamaIndex's `NLSQLTableQueryEngine` to translate natural language into PostgreSQL queries. 
-- **Best for**: "How many...?", "What is the average...?", "Give me a count of...".
-
-### 6.2 `hybrid_discovery` (The Architectural Core)
-- **Purpose**: Combined behavioral + semantic search.
-- **Logic**:
-  1. **SQL Gate**: Runs a `SELECT DISTINCT customer_id` based on `sql_where` (behavioral events).
-  2. **Metadata Filter**: Creates an `IN` filter for the resulting IDs.
-  3. **Vector Search**: Executes a similarity search on the semantic profiles *within* that ID set.
-- **Best for**: "Customers who bought X and are interested in Y."
-
-### 6.3 `sql_data_retriever`
-- **Purpose**: Raw data retrieval for profile enrichment.
-- **Logic**: Executes direct SQL `SELECT` queries to fetch the full JSON records for specific customer IDs.
-- **Best for**: "Show me the details...", "Return as JSON".
-
----
-
-## 7. Data Model Examples
-
-### 6.1 Vector Payload
-This is how a customer is represented in the vector store:
-
-```json
-{
-  "customer_id": 1,
-  "text": "Customer User1 Test1 (user1@demo.com) from PL, age 19, favorite color red. Total spent: 730.19. Primary interests: socks, shoes. Preferred colors: black, green.",
-  "metadata": {
-    "customer_id": 1,
-    "first_name": "User1",
-    "last_name": "Test1",
-    "email": "user1@demo.com",
-    "country": "PL",
-    "age": 19,
-    "total_spent": 730.19,
-    "favorite_color": "red",
-    "calculated_interests": "Primary interests: socks, shoes. Preferred colors: black, green.",
-    "likes_luxury": false
-  }
-}
-```
-
----
-
-## 7. Operational Features
-
-### 7.1 Cost Observability (NFR1)
-The engine includes a `TokenCountingHandler` that logs real-time usage for every discovery query:
-- LLM Prompt/Completion tokens
-- Embedding tokens
-- Transactional cost estimation parity
-
-### 7.2 Tool Debugging
-Enable transparency by monitoring tool arguments in real-time:
-- View exact SQL queries generated by the agent.
-- View metadata filter dictionaries applied to vector search.
-
----
-
-## 8. How to Run
-
-1. **Bootstrap**: `docker-compose up -d`
-2. **Ingest**: `python ingest_data.py`
-3. **Discover**: `python main.py`
-
-**Sample Discoveries:**
-- *"Suggest customers for a luxury red-themed fashion campaign."*
-- *"Find users who bought socks and are interested in high-end lifestyle."*
+- **Audience**: audience.json
+- **Campaign**: campaign.md
