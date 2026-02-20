@@ -53,8 +53,10 @@ def raw_data_query(query: str):
     
     with engine.connect() as conn:
         import pandas as pd
+        import json
         df = pd.read_sql(query, conn)
-        result = df.to_dict(orient='records')
+        # Safely serialize datetime objects to isoformat strings
+        result = json.loads(df.to_json(orient='records', date_format='iso'))
         print(f"[DEBUG] Data retrieval result: {len(result)} records found.\n")
         return result
 
@@ -179,12 +181,6 @@ async def semantic_refinement_node(state: DiscoveryState):
     metadata_filters = [
         MetadataFilter(key="customer_id", value=state['candidate_ids'], operator=FilterOperator.IN)
     ]
-    
-    # Optional luxury filter if theme implies it
-    if "luxury" in theme.lower():
-        metadata_filters.append(
-            MetadataFilter(key="metadata.likes_luxury", value=1, operator=FilterOperator.EQ)
-        )
         
     filters_obj = MetadataFilters(filters=metadata_filters)
     
@@ -282,7 +278,7 @@ async def output_node(state: DiscoveryState):
     print("[NODE] Output Node")
     
     with open("audience.json", "w") as f:
-        json.dump(state['enriched_profiles'], f, indent=2)
+        json.dump(state['enriched_profiles'], f, indent=2, default=str)
         
     with open("campaign.md", "w") as f:
         f.write("# Campaign Strategy\n\n")
@@ -325,4 +321,13 @@ app = workflow.compile()
 async def run_discovery_pipeline(query: str):
     inputs = {"query": query, "iterations": 0}
     final_state = await app.ainvoke(inputs)
-    return final_state
+    
+    if "error" in final_state and final_state["error"]:
+        return f"Pipeline failed: {final_state['error']}"
+        
+    return (
+        "Campaign Strategy successfully generated and saved to 'campaign.md'.\n"
+        f"Audience profiles ({len(final_state.get('enriched_profiles', []))} found) saved to 'audience.json'.\n\n"
+        "--- Strategy Preview ---\n\n"
+        f"{final_state.get('recommendation', 'No recommendation generated.')}"
+    )

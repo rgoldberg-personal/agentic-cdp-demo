@@ -1,5 +1,16 @@
 [
   {
+    "customer_id": 57,
+    "first_name": "User57",
+    "last_name": "Test57",
+    "email": "user57@demo.com",
+    "country": "AT",
+    "age": 28,
+    "total_spent": 1515.49,
+    "favorite_color": "red",
+    "created_at": "2025-03-02T08:02:56.174"
+  },
+  {
     "customer_id": 87,
     "first_name": "User87",
     "last_name": "Test87",
@@ -8,7 +19,7 @@
     "age": 44,
     "total_spent": 1927.63,
     "favorite_color": "red",
-    "created_at": "2024-11-22 08:02:56.175047"
+    "created_at": "2024-11-22T08:02:56.175"
   },
   {
     "customer_id": 94,
@@ -19,29 +30,51 @@
     "age": 20,
     "total_spent": 1393.95,
     "favorite_color": "red",
-    "created_at": "2025-06-03 08:02:56.175067"
+    "created_at": "2025-06-03T08:02:56.175"
   },
   {
-    "customer_id": 133,
-    "first_name": "User133",
-    "last_name": "Test133",
-    "email": "user133@demo.com",
-    "country": "PL",
-    "age": 58,
-    "total_spent": 89.62,
-    "favorite_color": "blue",
-    "created_at": "2025-01-14 08:02:56.175181"
-  },
-  {
-    "customer_id": 159,
-    "first_name": "User159",
-    "last_name": "Test159",
-    "email": "user159@demo.com",
+    "customer_id": 110,
+    "first_name": "User110",
+    "last_name": "Test110",
+    "email": "user110@demo.com",
     "country": "CZ",
-    "age": 34,
-    "total_spent": 86.72,
+    "age": 61,
+    "total_spent": 1496.52,
     "favorite_color": "red",
-    "created_at": "2024-12-16 08:02:56.175264"
+    "created_at": "2025-02-24T08:02:56.175"
+  },
+  {
+    "customer_id": 144,
+    "first_name": "User144",
+    "last_name": "Test144",
+    "email": "user144@demo.com",
+    "country": "PL",
+    "age": 25,
+    "total_spent": 1196.92,
+    "favorite_color": "red",
+    "created_at": "2025-09-26T08:02:56.175"
+  },
+  {
+    "customer_id": 176,
+    "first_name": "User176",
+    "last_name": "Test176",
+    "email": "user176@demo.com",
+    "country": "CZ",
+    "age": 42,
+    "total_spent": 1863.07,
+    "favorite_color": "red",
+    "created_at": "2025-05-10T08:02:56.175"
+  },
+  {
+    "customer_id": 216,
+    "first_name": "User216",
+    "last_name": "Test216",
+    "email": "user216@demo.com",
+    "country": "PL",
+    "age": 55,
+    "total_spent": 1737.98,
+    "favorite_color": "red",
+    "created_at": "2024-05-28T08:02:56.175"
   },
   {
     "customer_id": 227,
@@ -52,62 +85,40 @@
     "age": 60,
     "total_spent": 1518.24,
     "favorite_color": "red",
-    "created_at": "2025-10-18 08:02:56.175464"
+    "created_at": "2025-10-18T08:02:56.175"
   },
   {
-    "customer_id": 230,
-    "first_name": "User230",
-    "last_name": "Test230",
-    "email": "user230@demo.com",
-    "country": "CZ",
-    "age": 61,
-    "total_spent": 1401.92,
-    "favorite_color": "green",
-    "created_at": "2024-03-21 08:02:56.175471"
-  },
-  {
-    "customer_id": 244,
-    "first_name": "User244",
-    "last_name": "Test244",
-    "email": "user244@demo.com",
-    "country": "CZ",
-    "age": 30,
-    "total_spent": 1686.81,
-    "favorite_color": "red",
-    "created_at": "2025-06-02 08:02:56.175537"
-  },
-  {
-    "customer_id": 254,
-    "first_name": "User254",
-    "last_name": "Test254",
-    "email": "user254@demo.com",
-    "country": "DE",
-    "age": 50,
-    "total_spent": 1095.59,
-    "favorite_color": "black",
-    "created_at": "2025-06-11 08:02:56.175565"
-  },
-  {
-    "customer_id": 274,
-    "first_name": "User274",
-    "last_name": "Test274",
-    "email": "user274@demo.com",
-    "country": "AT",
+    "customer_id": 234,
+    "first_name": "User234",
+    "last_name": "Test234",
+    "email": "user234@demo.com",
+    "country": "PL",
     "age": 63,
-    "total_spent": 1936.95,
-    "favorite_color": "blue",
-    "created_at": "2024-10-30 08:02:56.175624"
+    "total_spent": 1758.08,
+    "favorite_color": "red",
+    "created_at": "2024-11-11T08:02:56.175"
   },
   {
-    "customer_id": 315,
-    "first_name": "User315",
-    "last_name": "Test315",
-    "email": "user315@demo.com",
-    "country": "AT",
-    "age": 20,
-    "total_spent": 361.34,
+    "customer_id": 250,
+    "first_name": "User250",
+    "last_name": "Test250",
+    "email": "user250@demo.com",
+    "country": "DE",
+    "age": 45,
+    "total_spent": 1691.62,
     "favorite_color": "red",
-    "created_at": "2024-10-14 08:02:56.175939"
+    "created_at": "2024-06-18T08:02:56.175"
+  },
+  {
+    "customer_id": 314,
+    "first_name": "User314",
+    "last_name": "Test314",
+    "email": "user314@demo.com",
+    "country": "PL",
+    "age": 62,
+    "total_spent": 816.71,
+    "favorite_color": "red",
+    "created_at": "2025-12-27T08:02:56.175"
   },
   {
     "customer_id": 320,
@@ -118,105 +129,94 @@
     "age": 37,
     "total_spent": 1711.06,
     "favorite_color": "red",
-    "created_at": "2024-07-18 08:02:56.175954"
+    "created_at": "2024-07-18T08:02:56.175"
   },
   {
-    "customer_id": 327,
-    "first_name": "User327",
-    "last_name": "Test327",
-    "email": "user327@demo.com",
-    "country": "DE",
-    "age": 18,
-    "total_spent": 577.51,
-    "favorite_color": "red",
-    "created_at": "2024-04-09 08:02:56.175976"
-  },
-  {
-    "customer_id": 329,
-    "first_name": "User329",
-    "last_name": "Test329",
-    "email": "user329@demo.com",
-    "country": "CZ",
-    "age": 41,
-    "total_spent": 797.75,
-    "favorite_color": "black",
-    "created_at": "2024-05-28 08:02:56.175981"
-  },
-  {
-    "customer_id": 355,
-    "first_name": "User355",
-    "last_name": "Test355",
-    "email": "user355@demo.com",
-    "country": "CZ",
-    "age": 42,
-    "total_spent": 1953.54,
-    "favorite_color": "red",
-    "created_at": "2025-06-28 08:02:56.176065"
-  },
-  {
-    "customer_id": 375,
-    "first_name": "User375",
-    "last_name": "Test375",
-    "email": "user375@demo.com",
+    "customer_id": 343,
+    "first_name": "User343",
+    "last_name": "Test343",
+    "email": "user343@demo.com",
     "country": "PL",
-    "age": 25,
-    "total_spent": 539.51,
-    "favorite_color": "blue",
-    "created_at": "2024-10-06 08:02:56.176127"
-  },
-  {
-    "customer_id": 404,
-    "first_name": "User404",
-    "last_name": "Test404",
-    "email": "user404@demo.com",
-    "country": "CZ",
-    "age": 21,
-    "total_spent": 1119.96,
+    "age": 52,
+    "total_spent": 969.42,
     "favorite_color": "red",
-    "created_at": "2026-01-29 08:02:56.176226"
+    "created_at": "2024-08-11T08:02:56.176"
   },
   {
-    "customer_id": 409,
-    "first_name": "User409",
-    "last_name": "Test409",
-    "email": "user409@demo.com",
-    "country": "DE",
+    "customer_id": 360,
+    "first_name": "User360",
+    "last_name": "Test360",
+    "email": "user360@demo.com",
+    "country": "CZ",
+    "age": 61,
+    "total_spent": 1294.22,
+    "favorite_color": "red",
+    "created_at": "2025-02-01T08:02:56.176"
+  },
+  {
+    "customer_id": 366,
+    "first_name": "User366",
+    "last_name": "Test366",
+    "email": "user366@demo.com",
+    "country": "PL",
     "age": 63,
-    "total_spent": 1861.04,
-    "favorite_color": "green",
-    "created_at": "2026-02-01 08:02:56.176238"
+    "total_spent": 1128.57,
+    "favorite_color": "red",
+    "created_at": "2024-10-23T08:02:56.176"
   },
   {
-    "customer_id": 410,
-    "first_name": "User410",
-    "last_name": "Test410",
-    "email": "user410@demo.com",
+    "customer_id": 368,
+    "first_name": "User368",
+    "last_name": "Test368",
+    "email": "user368@demo.com",
     "country": "PL",
-    "age": 36,
-    "total_spent": 1354.36,
-    "favorite_color": "blue",
-    "created_at": "2024-12-26 08:02:56.176241"
+    "age": 52,
+    "total_spent": 1556.08,
+    "favorite_color": "red",
+    "created_at": "2025-03-03T08:02:56.176"
   },
   {
-    "customer_id": 412,
-    "first_name": "User412",
-    "last_name": "Test412",
-    "email": "user412@demo.com",
-    "country": "AT",
-    "age": 31,
-    "total_spent": 694.11,
-    "favorite_color": "blue",
-    "created_at": "2024-11-30 08:02:56.176246"
+    "customer_id": 455,
+    "first_name": "User455",
+    "last_name": "Test455",
+    "email": "user455@demo.com",
+    "country": "DE",
+    "age": 30,
+    "total_spent": 1680.47,
+    "favorite_color": "red",
+    "created_at": "2025-07-31T08:02:56.176"
   },
   {
-    "customer_id": 414,
-    "first_name": "User414",
-    "last_name": "Test414",
-    "email": "user414@demo.com",
+    "customer_id": 460,
+    "first_name": "User460",
+    "last_name": "Test460",
+    "email": "user460@demo.com",
     "country": "PL",
-    "age": 59,
-    "total_spent": 222.88,
-    "favorite_color": "blue",
-    "created_at": "2024-07-22 08:02:56.176253"
+    "age": 27,
+    "total_spent": 1752.16,
+    "favorite_color": "red",
+    "created_at": "2024-07-22T08:02:56.176"
+  },
+  {
+    "customer_id": 481,
+    "first_name": "User481",
+    "last_name": "Test481",
+    "email": "user481@demo.com",
+    "country": "CZ",
+    "age": 48,
+    "total_spent": 1325.69,
+    "favorite_color": "red",
+    "created_at": "2025-09-12T08:02:56.176"
+  },
+  {
+    "customer_id": 494,
+    "first_name": "User494",
+    "last_name": "Test494",
+    "email": "user494@demo.com",
+    "country": "DE",
+    "age": 57,
+    "total_spent": 1357.73,
+    "favorite_color": "red",
+    "created_at": "2025-04-08T08:02:56.176"
   }
 ]

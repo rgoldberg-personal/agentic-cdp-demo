@@ -4,7 +4,10 @@ from sqlalchemy import create_engine, TIMESTAMP
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
 from sentence_transformers import SentenceTransformer
-from config import DB_URL, QDRANT_HOST, QDRANT_PORT, COLLECTION_NAME, EMBEDDING_MODEL_NAME
+from config import DB_URL, QDRANT_HOST, QDRANT_PORT, COLLECTION_NAME
+
+EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
+
 
 def ingest_to_postgres():
     print("Connecting to PostgreSQL...")
@@ -45,6 +48,8 @@ def calculate_interests(cust_events):
     interests += f"Preferred colors: {', '.join([c[0] for c in top_colors])}."
     return interests
 
+import uuid
+
 def ingest_to_qdrant(crm_df, events_df):
     print("Connecting to Qdrant...")
     client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
@@ -63,23 +68,33 @@ def ingest_to_qdrant(crm_df, events_df):
         calculated_interests = calculate_interests(cust_events)
         
         luxury_tag = " This customer likes luxury items." if row['total_spent'] > 800 else ""
-        description = (
-            f"Customer {row['first_name']} {row['last_name']} ({row['email']}) "
-            f"from {row['country']}, age {row['age']}, favorite color {row['favorite_color']}. "
-            f"Total spent: {row['total_spent']}. {calculated_interests}{luxury_tag}"
-        )
         
-        vector = model.encode(description).tolist()
-        payload = {
+        # Create 3 distinct semantic chunks
+        chunks = {
+            "demographics": f"Demographics: age {row['age']}, {row['country']}.",
+            "purchase_behavior": f"Purchase behavior: {calculated_interests}",
+            "preferences": f"Preferences: favorite color {row['favorite_color']}.{luxury_tag}"
+        }
+        
+        payload_base = {
             "customer_id": int(customer_id),
-            "text": description,
             "metadata": {
                 **row.to_dict(),
                 "likes_luxury": 1 if luxury_tag else 0
             }
         }
         
-        points.append(PointStruct(id=int(customer_id), vector=vector, payload=payload))
+        for k, text_chunk in chunks.items():
+            vector = model.encode(text_chunk).tolist()
+            payload = {
+                **payload_base,
+                "text": text_chunk,
+                "chunk_type": k
+            }
+            # Generate a UUID string for multiple chunks per customer
+            point_id = str(uuid.uuid4())
+            points.append(PointStruct(id=point_id, vector=vector, payload=payload))
+            
         if len(points) >= 100:
             client.upsert(collection_name=COLLECTION_NAME, points=points)
             points = []
